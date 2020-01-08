@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/tilemap.png" type="Texture" id=1]
+[ext_resource path="res://scenes/House.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 7, 3.5 )
+
+[node name="House" type="StaticBody2D"]
+collision_layer = 0
+script = ExtResource( 2 )
+
+[node name="Inside" type="Node2D" parent="."]
+
+[node name="Sprite" type="Sprite" parent="Inside"]
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 16, 0, 16, 16 )
+
+[node name="Outside" type="Node2D" parent="."]
+
+[node name="Sprite" type="Sprite" parent="Outside"]
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 16, 16 )
+
+[node name="FloorArea" type="Area2D" parent="."]
+gravity = 0.0
+collision_layer = 0
+__meta__ = {
+"_editor_description_": "Doorway is used to know whether a body enters or leaves the house."
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorArea"]
+position = Vector2( 0, 3.5 )
+shape = SubResource( 1 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -6, 7, -7, 7, -7, 0, 7, 0, 7, 7, -3, 7, -3, 8, 8, 8, 8, -1, -8, -1, -8, 8, -6, 8 )
+
+[node name="CameraZoomTween" type="Tween" parent="."]
+[connection signal="body_entered" from="FloorArea" to="." method="_on_FloorArea_body_entered"]
+[connection signal="body_exited" from="FloorArea" to="." method="_on_FloorArea_body_exited"]
